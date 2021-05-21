@@ -6,6 +6,7 @@ import 'package:quick_pick/screens/orders_screen.dart';
 import 'package:quick_pick/screens/product_details_screen.dart';
 import 'package:quick_pick/screens/products_overview_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:quick_pick/screens/user_product_screen.dart';
 import './providers/products_provider.dart';
 
 void main() {
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
             // CartScreen.routeName: (context) => CartScreen(),
             CartScreen.routeName: (con) => CartScreen(),
             OrdersSreen.routeName: (con) => OrdersSreen(),
+            UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
           }),
     );
   }
