@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:quick_pick/providers/cart.dart';
 import 'package:quick_pick/providers/orders.dart';
 import 'package:quick_pick/screens/cart_screen.dart';
+import 'package:quick_pick/screens/edit_product_screen.dart';
 import 'package:quick_pick/screens/orders_screen.dart';
 import 'package:quick_pick/screens/product_details_screen.dart';
 import 'package:quick_pick/screens/products_overview_screen.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
             CartScreen.routeName: (con) => CartScreen(),
             OrdersSreen.routeName: (con) => OrdersSreen(),
             UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
+            EditProductScreen.routeName: (ctx) => EditProductScreen(),
           }),
     );
   }
