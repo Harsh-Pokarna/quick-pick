@@ -8,6 +8,10 @@ import 'package:quick_pick/widgets/user_product_item.dart';
 class UserProductsScreen extends StatelessWidget {
   static const routeName = '/user-products-screen';
 
+  Future<void> _refreshProducts(BuildContext context) async {
+    await Provider.of<ProductsProvider>(context).fetchAndSetProducts();
+  }
+
   @override
   Widget build(BuildContext context) {
     final productsData = Provider.of<ProductsProvider>(context);
@@ -24,22 +28,25 @@ class UserProductsScreen extends StatelessWidget {
         ],
       ),
       drawer: AppDrawer(),
-      body: Container(
-        // height: 400,
-        child: ListView.builder(
-          itemBuilder: (_, index) => Column(
-            children: [
-              UserProductItem(
-                id: productsData.items[index].id,
-                imageUrl: productsData.items[index].imageUrl,
-                title: productsData.items[index].title,
-              ),
-              Divider(),
-            ],
+      body: RefreshIndicator(
+        onRefresh: () => _refreshProducts(context),
+        child: Container(
+          // height: 400,
+          child: ListView.builder(
+            itemBuilder: (_, index) => Column(
+              children: [
+                UserProductItem(
+                  id: productsData.items[index].id,
+                  imageUrl: productsData.items[index].imageUrl,
+                  title: productsData.items[index].title,
+                ),
+                Divider(),
+              ],
+            ),
+            itemCount: productsData.items.length,
           ),
-          itemCount: productsData.items.length,
+          padding: EdgeInsets.all(10),
         ),
-        padding: EdgeInsets.all(10),
       ),
     );
   }

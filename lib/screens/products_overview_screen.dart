@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quick_pick/providers/cart.dart';
+import 'package:quick_pick/providers/products_provider.dart';
 import 'package:quick_pick/screens/cart_screen.dart';
 import 'package:quick_pick/widgets/app_drawer.dart';
 import 'package:quick_pick/widgets/badge.dart';
@@ -21,6 +22,44 @@ class ProductsOverviewScreen extends StatefulWidget {
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   var _showOnlyFavorites = false;
+  var _isLoading = false;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   Future.delayed(Duration.zero).then((value) =>
+  //       Provider.of<ProductsProvider>(context).fetchAndSetProducts());
+  // }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   Provider.of<ProductsProvider>(context, listen: false).fetchAndSetProducts();
+  // }
+  int i = 0;
+  var _isInit = true;
+  void getData(BuildContext context) async {
+    await Provider.of<ProductsProvider>(context).fetchAndSetProducts();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (_isInit) {
+      // print('time');
+      // print(_isInit.toString());
+      // Provider.of<ProductsProvider>(context)
+      //     .fetchAndSetProducts()
+      //     .then((value) {
+      //   print(_isInit.toString());
+      //   i++;
+      //   print(i);
+      // });
+      getData(context);
+      _isInit = false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

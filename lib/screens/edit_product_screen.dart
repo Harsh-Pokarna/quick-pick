@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:quick_pick/providers/product.dart';
 import 'package:provider/provider.dart';
 import 'package:quick_pick/providers/products_provider.dart';
+import 'package:quick_pick/screens/cart_screen.dart';
 import 'package:quick_pick/screens/user_product_screen.dart';
 
 class EditProductScreen extends StatefulWidget {
@@ -72,7 +73,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     super.didChangeDependencies();
   }
 
-  void _saveForm() {
+  void _saveForm() async {
     final isValid = _formGlobalKey.currentState.validate();
     if (isValid) {
       _formGlobalKey.currentState.save();
@@ -80,7 +81,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
         isLoading = true;
       });
       if (_editedProduct.id != null) {
-        Provider.of<ProductsProvider>(context, listen: false)
+        await Provider.of<ProductsProvider>(context, listen: false)
             .updateProduct(_editedProduct.id, _editedProduct);
         setState(() {
           isLoading = false;
@@ -89,12 +90,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
       } else {
         Provider.of<ProductsProvider>(context, listen: false)
             .addProduct(_editedProduct)
-            .then((value) {
-          setState(() {
-            isLoading = false;
-          });
-          Navigator.of(context).pop();
-        }).catchError((error) {
+            .catchError((error) {
           return showDialog(
               context: context,
               builder: (ctx) {
@@ -103,16 +99,20 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   content: Text(error.toString()),
                   actions: [
                     TextButton(
-                        onPressed: () {
-                          setState(() {
-                            isLoading = false;
-                          });
-                          return Navigator.of(ctx).pop();
-                        },
-                        child: Text('Okay'))
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pushNamed(UserProductsScreen.routeName);
+                      },
+                      child: Text('Okay'),
+                    )
                   ],
                 );
               });
+        }).then((value) {
+          setState(() {
+            isLoading = false;
+          });
+          Navigator.of(context).pop();
         });
       }
     }
