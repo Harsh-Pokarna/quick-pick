@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:quick_pick/models/http_exception.dart';
+import 'package:quick_pick/providers/auth.dart';
 import 'package:quick_pick/providers/product.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductsProvider with ChangeNotifier {
   List<Product> _items = [
@@ -48,13 +50,20 @@ class ProductsProvider with ChangeNotifier {
     return [..._items];
   }
 
+  // ProductsProvider(this.authToken, this._items);
+  Future<String> get myAuthToken async {
+    Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+    final SharedPreferences prefs = await _prefs;
+    return prefs.getString('authToken');
+  }
+
   List<Product> get favoriteItems {
     return _items.where((element) => element.isFavorite).toList();
   }
 
   Future<void> addProduct(Product product) async {
-    const url =
-        'https://quick-pick-947bd-default-rtdb.firebaseio.com/products.json';
+    final url =
+        'https://quick-pick-947bd-default-rtdb.firebaseio.com/products.json?auth=${await myAuthToken}';
     try {
       final response = await http.post(Uri.parse(url),
           body: json.encode({
@@ -97,8 +106,8 @@ class ProductsProvider with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts() async {
-    const url =
-        'https://quick-pick-947bd-default-rtdb.firebaseio.com/products.json';
+    final url =
+        'https://quick-pick-947bd-default-rtdb.firebaseio.com/products.json?auth=${await myAuthToken}';
     try {
       final response = await http.get(Uri.parse(url));
       final List<Product> loadedProducts = [];

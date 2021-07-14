@@ -20,31 +20,35 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider.value(value: ProductsProvider()),
-        ChangeNotifierProvider.value(value: Cart()),
-        ChangeNotifierProvider.value(value: Orders()),
-        ChangeNotifierProvider.value(value: Auth()),
-      ],
-      child: MaterialApp(
-          title: 'Flutter Demo',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-            primaryColor: Colors.purple,
-            accentColor: Colors.deepOrange,
-            fontFamily: 'WorkSans',
-          ),
-          home: AuthScreen(),
-          routes: {
-            ProductDetailsScreen.routeName: (context) => ProductDetailsScreen(),
-            // CartScreen.routeName: (context) => CartScreen(),
-            // CartScreen.routeName: (context) => CartScreen(),
-            CartScreen.routeName: (con) => CartScreen(),
-            AuthScreen.routeName: (con) => AuthScreen(),
-            OrdersSreen.routeName: (con) => OrdersSreen(),
-            UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
-            EditProductScreen.routeName: (ctx) => EditProductScreen(),
-          }),
-    );
+        providers: [
+          ChangeNotifierProvider.value(value: Cart()),
+          ChangeNotifierProvider.value(value: Orders()),
+          ChangeNotifierProvider.value(value: Auth()),
+          ChangeNotifierProvider.value(value: ProductsProvider()),
+        ],
+        child: Consumer<Auth>(
+          builder: (context, auth, child) {
+            return MaterialApp(
+                title: 'Flutter Demo',
+                theme: ThemeData(
+                  primarySwatch: Colors.blue,
+                  primaryColor: Colors.purple,
+                  accentColor: Colors.deepOrange,
+                  fontFamily: 'WorkSans',
+                ),
+                home: auth.isAuth ? ProductsOverviewScreen() : AuthScreen(),
+                routes: {
+                  ProductDetailsScreen.routeName: (context) =>
+                      ProductDetailsScreen(),
+                  // CartScreen.routeName: (context) => CartScreen(),
+                  // CartScreen.routeName: (context) => CartScreen(),
+                  CartScreen.routeName: (con) => CartScreen(),
+                  AuthScreen.routeName: (con) => AuthScreen(),
+                  OrdersSreen.routeName: (con) => OrdersSreen(),
+                  UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
+                  EditProductScreen.routeName: (ctx) => EditProductScreen(),
+                });
+          },
+        ));
   }
 }

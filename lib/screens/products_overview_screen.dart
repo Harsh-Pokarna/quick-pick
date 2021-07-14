@@ -44,20 +44,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
-    if (_isInit) {
-      // print('time');
-      // print(_isInit.toString());
-      // Provider.of<ProductsProvider>(context)
-      //     .fetchAndSetProducts()
-      //     .then((value) {
-      //   print(_isInit.toString());
-      //   i++;
-      //   print(i);
-      // });
-      getData(context);
-      _isInit = false;
-    }
+    getData(context);
   }
 
   @override
